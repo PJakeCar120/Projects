@@ -1,0 +1,597 @@
+---
+title: "What is a Safe First Rounder?"
+output:
+  pdf_document: default
+  html_document: default
+date: "2023-12-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Revised tibble for first-round NFL quarterbacks from 2013 to 2019
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+install.packages("tibble")
+library(tibble)
+quarterbacks <- tibble(
+  Year = c(2013, 2014, 2014, 2014, 2015, 2015, 2016, 2016, 2016, 2017, 2017, 2017, 2018, 2018, 2018, 2018, 2018, 2019, 2019, 2019),
+  Quarterback = c("EJ Manuel", "Blake Bortles", "Johnny Manziel", "Teddy Bridgewater", 
+                  "Jameis Winston", "Marcus Mariota", "Jared Goff", "Carson Wentz", 
+                  "Paxton Lynch", "Mitchell Trubisky", "Patrick Mahomes", "Deshaun Watson", 
+                  "Baker Mayfield", "Sam Darnold", "Josh Allen", "Josh Rosen", "Lamar Jackson", 
+                  "Kyler Murray", "Daniel Jones", "Dwayne Haskins"),
+  Still_Starter = c("No", "No", "No", "No", "No", "No", "Yes", "No", 
+                    "No", "No", "Yes", "Yes", "Yes", "No", "Yes", "No", "Yes", 
+                    "Yes", "Yes", "No"),
+  Multiple_Pro_Bowls = c("No", "No", "No", "No", "No", "No", "Yes", "No", 
+                         "No", "No", "Yes", "Yes", "No", "No", "Yes", "No", "Yes", 
+                         "Yes", "No", "No"),
+  All_Pro = c("No", "No", "No", "No", "No", "No", "No", "No", 
+              "No", "No", "Yes", "No", "No", "No", "No", "No", "Yes", 
+              "No", "No", "No")
+)
+
+# View the revised tibble
+print(quarterbacks)
+
+# Calculate the percentages
+total_qbs <- nrow(quarterbacks)
+still_starter_yes_percent <- (sum(quarterbacks$Still_Starter == "Yes") / total_qbs) * 100
+multiple_pro_bowls_yes_percent <- (sum(quarterbacks$Multiple_Pro_Bowls == "Yes") / total_qbs) * 100
+all_pro_yes_percent <- (sum(quarterbacks$All_Pro == "Yes") / total_qbs) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes':", still_starter_yes_percent, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes':", multiple_pro_bowls_yes_percent, "%\n")
+cat("Percentage of 'All-Pro - Yes':", all_pro_yes_percent, "%\n")
+
+
+
+
+```
+
+```{r}
+# Updated tibble for first-round NFL running backs from 2013 to 2019
+RBs <- tibble(
+  Year = c(2013, 2013, 2013, 2013, 2013, 2013, 2014, 2014, 2014, 2015, 2015, 2016, 2017, 2017, 2018, 2018, 2018, 2019),
+  Running_Back = c("Cordarelle Patterson", "Giovani Bernard", "Le'Veon Bell", "Montee Ball", "Eddie Lacy", "Christine Michael", 
+                   "Bishop Sankey", "Jeremy Hill", "Carlos Hyde", "Todd Gurley", "Melvin Gordon", "Ezekiel Elliott", 
+                   "Leonard Fournette", "Christian McCaffrey", "Saquon Barkley", "Rashaad Penny", "Sony Michel", "Josh Jacobs"),
+  Still_Starter = c("No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "Yes", "Yes", "No", "No", "Yes"),
+  Multiple_Pro_Bowls = c("No", "No", "Yes", "No", "No", "No", "No", "No", "No", "Yes", "Yes", "Yes", "No", "Yes", "Yes", "No", "No", "Yes"),
+  All_Pro = c("No", "No", "Yes", "No", "No", "No", "No", "No", "No", "Yes", "No", "Yes", "No", "Yes", "No", "No", "No", "Yes")
+)
+
+# View the updated tibble
+print(RBs)
+
+# Calculate the percentages
+total_rbs <- nrow(RBs)
+still_starter_yes_percent_rbs <- (sum(RBs$Still_Starter == "Yes") / total_rbs) * 100
+multiple_pro_bowls_yes_percent_rbs <- (sum(RBs$Multiple_Pro_Bowls == "Yes") / total_rbs) * 100
+all_pro_yes_percent_rbs <- (sum(RBs$All_Pro == "Yes") / total_rbs) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Running Backs:", still_starter_yes_percent_rbs, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Running Backs:", multiple_pro_bowls_yes_percent_rbs, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Running Backs:", all_pro_yes_percent_rbs, "%\n")
+
+
+
+```
+
+```{r}
+# Updated tibble for first-round NFL wide receivers from 2013 to 2019
+WRs <- tibble(
+  Year = c(2013, 2013, 2014, 2014, 2014, 2014, 2014, 2015, 2015, 2015, 2015, 2015, 2015, 2016, 2016, 2016, 2016, 2017, 2017, 2017, 2018, 2018, 2019, 2019),
+  Wide_Receiver = c("Tavon Austin", "Deandre Hopkins", "Sammy Watkins", "Mike Evans", "Odell Beckham Jr.", "Brandin Cooks", "Kelvin Benjamin",
+                    "Amari Cooper", "Kevin White", "DeVante Parker", "Nelson Agholor", "Breshad Perriman", "Phillip Dorsett",
+                    "Corey Coleman", "Will Fuller", "Josh Doctson", "Laquon Treadwell", 
+                    "Corey Davis", "Mike Williams", "John Ross",
+                    "D.J. Moore", "Calvin Ridley", 
+                    "Marquise Brown", "N'Keal Harry"),
+  Still_Starter = c("No", "Yes", "No", "Yes", "No", "Yes", "No",
+                    "Yes", "No", "No", "No", "No", "No",
+                    "No", "No", "No", "No", 
+                    "No", "Yes", "No", 
+                    "Yes", "Yes", 
+                    "Yes", "No"),
+  Multiple_Pro_Bowls = c("No", "Yes", "No", "Yes", "Yes", "No", "No",
+                         "Yes", "No", "No", "No", "No", "No",
+                         "No", "No", "No", "No", 
+                         "No", "No", "No", 
+                         "No", "No", 
+                         "No", "No"),
+  All_Pro = c("No", "Yes", "No", "No", "No", "No", "No",
+              "No", "No", "No", "No", "No", "No",
+              "No", "No", "No", "No", 
+              "No", "No", "No", 
+              "No", "No", 
+              "No", "No")
+)
+
+# View the updated tibble
+print(WRs)
+
+# Calculate the percentages
+total_wrs <- nrow(WRs)
+still_starter_yes_percent_wrs <- (sum(WRs$Still_Starter == "Yes") / total_wrs) * 100
+multiple_pro_bowls_yes_percent_wrs <- (sum(WRs$Multiple_Pro_Bowls == "Yes") / total_wrs) * 100
+all_pro_yes_percent_wrs <- (sum(WRs$All_Pro == "Yes") / total_wrs) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Wide Receivers:", still_starter_yes_percent_wrs, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Wide Receivers:", multiple_pro_bowls_yes_percent_wrs, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Wide Receivers:", all_pro_yes_percent_wrs, "%\n")
+
+
+
+```
+
+```{r}
+# Updated tibble for first-round NFL tight ends from 2013 to 2019
+TEs <- tibble(
+  Year = c(2013, 2014, 2017, 2017, 2017, 2018, 2019, 2019),
+  Tight_End = c("Tyler Eifert", "Eric Ebron", "O.J. Howard", "Evan Engram", "David Njoku", 
+                "Hayden Hurst", "T.J. Hockenson", "Noah Fant"),
+  Still_Starter = c("No", "No", "No", "Yes", "Yes", "Yes", "Yes", "No"),
+  Multiple_Pro_Bowls = c("No", "No", "No", "No", "No", "No", "Yes", "No"),
+  All_Pro = c("No", "No", "No", "No", "No", "No", "No", "No")
+)
+
+# View the updated tibble
+print(TEs)
+
+# Calculate the percentages
+total_tes <- nrow(TEs)
+still_starter_yes_percent_tes <- (sum(TEs$Still_Starter == "Yes") / total_tes) * 100
+multiple_pro_bowls_yes_percent_tes <- (sum(TEs$Multiple_Pro_Bowls == "Yes") / total_tes) * 100
+all_pro_yes_percent_tes <- (sum(TEs$All_Pro == "Yes") / total_tes) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Tight Ends:", still_starter_yes_percent_tes, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Tight Ends:", multiple_pro_bowls_yes_percent_tes, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Tight Ends:", all_pro_yes_percent_tes, "%\n")
+
+
+
+```
+
+```{r}
+# Creating a tibble for first-round NFL offensive tackles from 2013 to 2019
+OTs <- tibble(
+  Year = c(2013, 2013, 2013, 2013, 2014, 2014, 2014, 2014, 2015, 2015, 2015, 2015, 2016, 2016, 2016, 2016, 2016, 2017, 2017, 
+           2018, 2018, 2018, 2019, 2019, 2019, 2019),
+  Offensive_Tackle = c("Eric Fisher", "Luke Joeckel", "Lane Johnson", "D.J. Fluker", 
+                       "Ja'Wuan James", "Greg Robinson", "Jake Matthews", "Taylor Lewan", 
+                       "Ereck Flowers", "Andrus Peat", "Cedric Ogbuehi", "D.J. Humphries", 
+                       "Ronnie Stanley", "Jack Conklin", "Laremy Tunsil", "Taylor Decker", "Germain Ifedi", 
+                       "Garett Bolles", "Ryan Ramczyk", 
+                       "Mike McGlinchey", "Kolton Miller", "Isaiah Wynn", 
+                       "Jonah Williams", "Andre Dillard", "Tytus Howard", "Kaleb McGary"),
+  Still_Starter = c("No", "No", "Yes", "No", 
+                    "No", "No", "Yes", "No", 
+                    "No", "Yes", "No", "Yes", 
+                    "Yes", "Yes", "Yes", "Yes", "No", 
+                    "Yes", "Yes", 
+                    "Yes", "Yes", "Yes", 
+                    "Yes", "No", "Yes", "Yes"),
+  Multiple_Pro_Bowls = c("Yes", "No", "Yes", "No", 
+                         "No", "No", "No", "Yes", 
+                         "No", "Yes", "No", "No", 
+                         "No", "No", "Yes", "No", "No", 
+                         "No", "No", 
+                         "No", "No", "No", 
+                         "No", "No", "No", "No"),
+  All_Pro = c("No", "No", "Yes", "No", 
+              "No", "No", "No", "No", 
+              "No", "No", "No", "No", 
+              "Yes", "Yes", "No", "No", "No", 
+              "No", "Yes", 
+              "No", "No", "No", 
+              "No", "No", "No", "No")
+)
+
+# View the updated tibble
+print(OTs)
+
+# Calculate the percentages
+total_ots <- nrow(OTs)
+still_starter_yes_percent_ots <- (sum(OTs$Still_Starter == "Yes") / total_ots) * 100
+multiple_pro_bowls_yes_percent_ots <- (sum(OTs$Multiple_Pro_Bowls == "Yes") / total_ots) * 100
+all_pro_yes_percent_ots <- (sum(OTs$All_Pro == "Yes") / total_ots) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Offensive Tackles:", still_starter_yes_percent_ots, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Offensive Tackles:", multiple_pro_bowls_yes_percent_ots, "%\n")
+cat(" ercentage of 'All-Pro - Yes' among Offensive Tackles:", all_pro_yes_percent_ots, "%\n")
+
+
+```
+
+```{r}
+# Creating a tibble for first-round NFL offensive guards from 2013 to 2019
+OGs <- tibble(
+  Year = c(2013, 2013, 2013, 2013, 2014, 2014, 2015, 2016, 2018, 2019),
+  Offensive_Guard = c("Kyle Long", "Justin Pugh", "Jonathan Cooper", "Chance Warmack", "Zach Martin", "Brandon Scherff", "Laken Tomlinson", "Josh Garnett", "Quenton Nelson", "Chris Lindstrom"),
+  Still_Starter = c("No", "No", "No", "No", "Yes", "Yes", "Yes", "No", "Yes", "Yes"),
+  Multiple_Pro_Bowls = c("Yes", "No", "No", "No", "Yes", "Yes", "No", "No", "Yes", "No"),
+  All_Pro = c("No", "No", "No", "No", "Yes", "Yes", "No", "No", "Yes", "No")
+)
+
+# View the updated tibble
+print(OGs)
+
+# Calculate the percentages
+total_ogs <- nrow(OGs)
+still_starter_yes_percent_ogs <- (sum(OGs$Still_Starter == "Yes") / total_ogs) * 100
+multiple_pro_bowls_yes_percent_ogs <- (sum(OGs$Multiple_Pro_Bowls == "Yes") / total_ogs) * 100
+all_pro_yes_percent_ogs <- (sum(OGs$All_Pro == "Yes") / total_ogs) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Offensive Guards:", still_starter_yes_percent_ogs, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Offensive Guards:", multiple_pro_bowls_yes_percent_ogs, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Offensive Guards:", all_pro_yes_percent_ogs, "%\n")
+
+
+```
+
+```{r}
+# Creating a tibble for first-round NFL centers from 2013 to 2019
+Centers <- tibble(
+  Year = c(2013, 2015, 2016, 2018, 2018, 2019),
+  Center = c("Travis Frederick", "Cameron Erving", "Ryan Kelly", "Billy Price", "Frank Ragnow", "Garrett Bradbury"),
+  Still_Starter = c("No", "No", "Yes", "No", "Yes", "Yes"),
+  Multiple_Pro_Bowls = c("Yes", "No", "Yes", "No", "Yes", "No"),
+  All_Pro = c("Yes", "No", "No", "No", "No", "No")
+)
+
+# View the updated tibble
+print(Centers)
+
+# Calculate the percentages
+total_centers <- nrow(Centers)
+still_starter_yes_percent_centers <- (sum(Centers$Still_Starter == "Yes") / total_centers) * 100
+multiple_pro_bowls_yes_percent_centers <- (sum(Centers$Multiple_Pro_Bowls == "Yes") / total_centers) * 100
+all_pro_yes_percent_centers <- (sum(Centers$All_Pro == "Yes") / total_centers) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Centers:", still_starter_yes_percent_centers, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Centers:", multiple_pro_bowls_yes_percent_centers, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Centers:", all_pro_yes_percent_centers, "%\n")
+
+```
+
+```{r}
+# Updated tibble for first-round NFL defensive ends from 2013 to 2019
+DEs <- tibble(
+  Year = c(2013, 2013, 2013, 2013, 2014, 2014, 2014, 2014, 2014, 2015, 2015, 2015, 2016, 2017, 2017, 2017, 2017, 2017, 2018, 2018, 2019, 2019, 2019, 2019, 2019),
+  Defensive_End = c("Datone Jones", "Bjoern Werner", "Dion Jordan", "Ziggy Ansah", 
+                    "Marcus Smith", "Dominique Easley", "Leonard Williams", "Jadeveon Clowney", "Dee Ford", 
+                    "Arik Armstead", "Dante Fowler Jr.", "Shane Ray", "Shaq Lawson",
+                    "Myles Garrett", "Solomon Thomas", "Taco Charlton", "Derek Barnett", "Takkarist McKinley",
+                    "Bradley Chubb", "Marcus Davenport", 
+                    "Nick Bosa", "Clelin Ferrell", "Montez Sweat", "L.J. Collier", "Dexter Lawrence"),
+  Still_Starter = c("No", "No", "No", "No", 
+                    "No", "No", "Yes", "Yes", "No", 
+                    "Yes", "No", "No", "No",  
+                    "Yes", "No", "No", "No", "No", 
+                    "Yes", "Yes", 
+                    "Yes", "No", "Yes", "No", "Yes"),
+  Multiple_Pro_Bowls = c("No", "No", "No", "No", 
+                         "No", "No", "No", "Yes", "No", 
+                         "No", "No", "No", "No",  
+                         "Yes", "No", "No", "No", "No", 
+                         "Yes", "No", 
+                         "Yes", "No", "No", "No", "No"),
+  All_Pro = c("No", "No", "No", "No", 
+              "No", "No", "No", "No", "No", 
+              "No", "No", "No", "No",  
+              "Yes", "No", "No", "No", "No", 
+              "No", "No", 
+              "Yes", "No", "No", "No", "No")
+)
+
+# View the updated tibble
+print(DEs)
+
+# Calculate the percentages
+total_des <- nrow(DEs)
+still_starter_yes_percent_des <- (sum(DEs$Still_Starter == "Yes") / total_des) * 100
+multiple_pro_bowls_yes_percent_des <- (sum(DEs$Multiple_Pro_Bowls == "Yes") / total_des) * 100
+all_pro_yes_percent_des <- (sum(DEs$All_Pro == "Yes") / total_des) * 100
+
+# Print the percentages
+cat("Percentage of 'Still Starter - Yes' among Defensive Ends:", still_starter_yes_percent_des, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Defensive Ends:", multiple_pro_bowls_yes_percent_des, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Defensive Ends:", all_pro_yes_percent_des, "%\n")
+
+
+```
+
+```{r}
+# Updated tibble for first-round NFL defensive tackles from 2013 to 2019
+DTs <- tibble(
+  Year = c(2013, 2013, 2013, 2013, 2014, 2014, 2015, 2015, 2015, 2016, 2016, 2016, 2016, 2016, 2017, 2018, 2018, 2018, 2019, 2019, 2019, 2019, 2019),
+  Defensive_Tackle = c("Sheldon Richardson", "Sharrif Floyd", "Star Lotulelei", "Sylvester Williams", 
+                       "Aaron Donald", "Timmy Jernigan", 
+                       "Danny Shelton", "Malcom Brown", "Eddie Goldman", 
+                       "DeForest Buckner" , "Kenny Clark", "Sheldon Rankins", "Robert Nkemdiche", "Vernon Butler", 
+                       "Jonathan Allen", 
+                       "Vita Vea", "Da'Ron Payne", "Taven Bryan", 
+                       "Quinnen Williams", "Ed Oliver", "Christian Wilkins", "Jeffery Simmons", "Jerry Tillery"),
+  Still_Starter = c("No", "No", "No", "No", 
+                    "Yes", "No", 
+                    "No", "No", "No", 
+                    "Yes", "Yes", "Yes", "No", "No", 
+                    "Yes", 
+                    "Yes", "Yes", "No", 
+                    "Yes", "Yes", "Yes", "Yes", "No"),
+  Multiple_Pro_Bowls = c("No", "No", "No", "No", 
+                         "Yes", "No", 
+                         "No", "No", "No", 
+                         "Yes", "Yes", "No", "No", "No", 
+                         "Yes", 
+                         "No", "No", "No", 
+                         "No", "No", "No", "Yes", "No"),
+  All_Pro = c("No", "No", "No", "No", 
+              "Yes", "No", 
+              "No", "No", "No", 
+              "Yes", "No", "No", "No", "No", 
+              "No", 
+              "No", "No", "No", 
+              "No", "No", "No", "No", "No")
+)
+
+# View the updated tibble
+print(DTs)
+
+# Calculate the percentages for DTs
+total_dts <- nrow(DTs)
+still_starter_yes_percent_dts <- (sum(DTs$Still_Starter == "Yes") / total_dts) * 100
+multiple_pro_bowls_yes_percent_dts <- (sum(DTs$Multiple_Pro_Bowls == "Yes") / total_dts) * 100
+all_pro_yes_percent_dts <- (sum(DTs$All_Pro == "Yes") / total_dts) * 100
+
+# Print the percentages for DTs
+cat("Percentage of 'Still Starter - Yes' among Defensive Tackles:", still_starter_yes_percent_dts, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Defensive Tackles:", multiple_pro_bowls_yes_percent_dts, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Defensive Tackles:", all_pro_yes_percent_dts, "%\n")
+
+```
+
+```{r}
+# Updated tibble for first-round NFL middle linebackers from 2013 to 2019
+MLBs <- tibble(
+  Year = c(2013, 2014, 2015, 2016, 2017, 2017, 2018, 2018, 2018, 2019, 2019),
+  Middle_Linebacker = c("Alec Ogletree", "C.J. Mosley", "Stephone Anthony", "Darron Lee", "Reuben Foster", "Jarrad Davis", "Roquan Smith", "Rashaan Evans", "Tremaine Edmunds", "Devin Bush", "Devin White"),
+  Still_Starter = c("No", "Yes", "No", "No", "No", "No", "Yes", "No", "Yes", "No", "Yes"),
+  Multiple_Pro_Bowls = c("No", "Yes", "No", "No", "No", "No", "No", "No", "Yes", "No", "No"),
+  All_Pro = c("No", "No", "No", "No", "No", "No", "Yes", "No", "No", "No", "No")
+)
+
+# View the updated tibble
+print(MLBs)
+
+# Calculate the percentages for MLBs
+total_mlbs <- nrow(MLBs)
+still_starter_yes_percent_mlbs <- (sum(MLBs$Still_Starter == "Yes") / total_mlbs) * 100
+multiple_pro_bowls_yes_percent_mlbs <- (sum(MLBs$Multiple_Pro_Bowls == "Yes") / total_mlbs) * 100
+all_pro_yes_percent_mlbs <- (sum(MLBs$All_Pro == "Yes") / total_mlbs) * 100
+
+# Print the percentages for MLBs
+cat("Percentage of 'Still Starter - Yes' among Middle Linebackers:", still_starter_yes_percent_mlbs, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Middle Linebackers:", multiple_pro_bowls_yes_percent_mlbs, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Middle Linebackers:", all_pro_yes_percent_mlbs, "%\n")
+
+```
+
+```{r}
+# Updated tibble for first-round NFL outside linebackers from 2013 to 2019
+OLBs <- tibble(
+  Year = c(2013, 2013, 2014, 2014, 2014, 2015, 2015, 2015, 2016, 2016, 2017, 2017, 2017, 2018, 2019, 2019, 2019),
+  Outside_Linebacker = c("Barkevious Mingo", "Jarvis Jones", 
+                         "Ryan Shazier", "Khalil Mack", "Anthony Barr", 
+                         "Alvin Dupree", "Vic Beasley", "Shaq Thompson", 
+                         "Joey Bosa", "Leonard Floyd", 
+                         "Haason Reddick", "T.J. Watt", "Charles Harris", 
+                         "Leighton Vander Esch", 
+                         "Josh Allen", "Rashan Gary", "Brian Burns"),
+  Still_Starter = c("No", "No", 
+                    "No", "Yes", "No", 
+                    "Yes", "No", "Yes", 
+                    "Yes", "Yes", 
+                    "Yes", "Yes", "No", "Yes", 
+                    "Yes", "Yes", "Yes"),
+  Multiple_Pro_Bowls = c("No", "No", 
+                         "Yes", "Yes", "Yes", 
+                         "No", "No", "No", 
+                         "Yes", "No", 
+                         "No", "Yes", "No", "No", 
+                         "No", "No", "Yes"),
+  All_Pro = c("No", "No", 
+              "No", "Yes", "No", 
+              "No", "Yes", "No", 
+              "No", "No", 
+              "No", "Yes", "No", "No", 
+              "No", "No", "No")
+)
+
+# View the updated tibble
+print(OLBs)
+
+# Calculate the percentages for OLBs
+total_olbs <- nrow(OLBs)
+still_starter_yes_percent_olbs <- (sum(OLBs$Still_Starter == "Yes") / total_olbs) * 100
+multiple_pro_bowls_yes_percent_olbs <- (sum(OLBs$Multiple_Pro_Bowls == "Yes") / total_olbs) * 100
+all_pro_yes_percent_olbs <- (sum(OLBs$All_Pro == "Yes") / total_olbs) * 100
+
+# Print the percentages for OLBs
+cat("Percentage of 'Still Starter - Yes' among Outside Linebackers:", still_starter_yes_percent_olbs, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Outside Linebackers:", multiple_pro_bowls_yes_percent_olbs, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Outside Linebackers:", all_pro_yes_percent_olbs, "%\n")
+
+```
+
+```{r}
+# Updated tibble for first-round NFL safeties from 2013 to 2019
+Safeties <- tibble(
+  Year = c(2013, 2013, 2014, 2014, 2014, 2014, 2016, 2016, 2017, 2017, 2017, 2018, 2018, 2018, 2019, 2019),
+  Safety = c("Kenny Vaccaro", "Eric Reid", "Calvin Pryor", "Ha Ha Clinton-Dix", "Deone Bucannon", "Jimmie Ward", 
+             "Karl Joseph", "Keanu Neal", "Jamal Adams", "Malik Hooker", "Jabrill Peppers", 
+             "Derwin James", "Terrell Edmunds", "Minkah Fitzpatrick", "Darnell Savage", "Johnathan Abram"),
+  Still_Starter = c("No", "No", "No", "No", "No", "Yes", 
+                    "No", "No", "Yes", "Yes", "Yes", 
+                    "Yes", "No", "Yes", "Yes", "No"),
+  Multiple_Pro_Bowls = c("No", "No", "No", "No", "No", "No", 
+                         "No", "No", "Yes", "No", "No", 
+                         "Yes", "No", "Yes", "No", "No"),
+  All_Pro = c("No", "No", "No", "No", "No", "No", 
+              "No", "No", "Yes", "No", "No", 
+              "Yes", "No", "Yes", "No", "No")
+)
+
+# View the updated tibble
+print(Safeties)
+
+# Calculate the percentages for Safeties
+total_safeties <- nrow(Safeties)
+still_starter_yes_percent_safeties <- (sum(Safeties$Still_Starter == "Yes") / total_safeties) * 100
+multiple_pro_bowls_yes_percent_safeties <- (sum(Safeties$Multiple_Pro_Bowls == "Yes") / total_safeties) * 100
+all_pro_yes_percent_safeties <- (sum(Safeties$All_Pro == "Yes") / total_safeties) * 100
+
+# Print the percentages for Safeties
+cat("Percentage of 'Still Starter - Yes' among Safeties:", still_starter_yes_percent_safeties, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Safeties:", multiple_pro_bowls_yes_percent_safeties, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Safeties:", all_pro_yes_percent_safeties, "%\n")
+
+```
+
+```{r}
+library(tibble)
+# Creating a tibble for the first-round NFL cornerbacks from 2013 to 2019
+corners <- tibble(
+  Year = c(2013, 2013, 2013, 2013, 2013, 2014, 2014, 2014, 2014, 2014, 2015, 2015, 2015, 2015, 2015, 2016, 2016, 2016, 2016, 2016, 2017, 2017, 2017, 2017, 2017, 2018, 2018, 2018, 2019, 2019, 2019),
+  Cornerback = c("Xavier Rhodes", "Matt Elam", "Dee Milliner", "D.J. Hayden", "Desmond Trufant", 
+                 "Darqueeze Dennard", "Bradley Roby", "Justin Gilbert", "Kyle Fuller", "Jason Verrett", 
+                 "Byron Jones", "Damarious Randall", "Trae Waynes", "Kevin Johnson", "Marcus Peters", 
+                 "Jalen Ramsey", "Vernon Hargreaves", "Eli Apple", "William Jackson III", "Artie Burns",
+                 "Marshon Lattimore", "Marlon Humphrey", "Adoree' Jackson", 
+                 "Denzel Ward", "Tre'Davious White", "Gareon Conley", "Jaire Alexander", "Mike Hughes",
+                 "Deandre Baker", "Rock Ya-Sin", "Greedy Williams"),
+  Still_Starter = c("No", "No", "No", "No", "No", 
+                    "No", "No", "No", "No", "No", 
+                    "No", "No", "No", "No", "Yes", 
+                    "Yes", "No", "Yes", "No", "No",
+                    "Yes", "Yes", "Yes", 
+                    "Yes", "Yes", "No", "Yes", "No",
+                    "No", "No", "No"),
+ Multiple_Pro_Bowls = c("Yes", "No", "No", "No", "No", 
+                                    "No", "No", "No", "Yes", "No", 
+                                    "No", "No", "No", "No", "Yes", 
+                                    "Yes", "No", "No", "No", "No",
+                                    "Yes", "Yes", "No", 
+                                    "Yes", "Yes", "No", "Yes", "No",
+                                    "No", "No", "No"),
+
+ All_Pro = c("Yes", "No", "No", "No", "No", 
+                         "No", "No", "No", "Yes", "No", 
+                         "No", "No", "No", "No", "Yes", 
+                         "Yes", "No", "No", "No", "No",
+                         "No", "Yes", "No", 
+                         "No", "Yes", "No", "No", "No",
+                         "No", "No", "No")
+)
+
+# View the tibble
+print(corners)
+
+# Calculate the percentages for Corners
+total_corners <- nrow(corners)
+still_starter_yes_percent_corners <- (sum(corners$Still_Starter == "Yes") / total_corners) * 100
+multiple_pro_bowls_yes_percent_corners <- (sum(corners$Multiple_Pro_Bowls == "Yes") / total_corners) * 100
+all_pro_yes_percent_corners<- (sum(corners$All_Pro == "Yes") / total_corners) * 100
+
+# Print the percentages for Safeties
+cat("Percentage of 'Still Starter - Yes' among Corners:", still_starter_yes_percent_corners, "%\n")
+cat("Percentage of 'Multiple Pro Bowls - Yes' among Corners:", multiple_pro_bowls_yes_percent_corners, "%\n")
+cat("Percentage of 'All-Pro - Yes' among Corners:", all_pro_yes_percent_corners, "%\n")
+```
+
+```{r}
+# Load the ggplot2 package
+library(ggplot2)
+
+# Define the data
+data <- data.frame(
+  Position = factor(c("QB", "RB", "WR", "TE", "OT", "OG", "C", "DT", "DE", "OLB", "MLB", "CB", "S"),
+                    levels = c("QB", "RB", "WR", "TE", "OT", "OG", "C", "DT", "DE", "OLB", "MLB", "CB", "S")),
+  Longevity = c(40, 16.66667, 33.33333, 50, 61.53846, 50, 50, 47.82609, 36, 64.70588, 36.36364, 29.03226, 43.75),
+  Consistency = c(30, 38.88889, 16.66667, 12.5, 19.23077, 40, 50, 21.73913, 16, 35.29412, 18.18182, 29.03226, 18.75),
+  StarPower = c(10, 27.77778, 4.166667, 0, 15.38462, 30, 16.66667, 8.695652, 8, 17.64706, 9.090909, 19.35484, 18.75)
+)
+
+# Longevity plot
+ggplot(data, aes(x = Position, y = Longevity)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Longevity of NFL First Round Draft Picks (2013-2019)", y = "% Still Starting")
+
+# Consistency plot
+ggplot(data, aes(x = Position, y = Consistency)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  labs(title = "Consistency of NFL First Round Draft Picks (2013-2019)", y = "% Multiple Pro Bowls")
+
+# Star Power plot
+ggplot(data, aes(x = Position, y = StarPower)) +
+  geom_bar(stat = "identity", fill = "salmon") +
+  labs(title = "Star Power of NFL First Round Draft Picks (2013-2019)", y = "% All-Pro")
+
+
+```
+```{r}
+# Load necessary library
+library(knitr)
+
+# Data for the table
+nfl_data <- data.frame(
+  Position = c("OG", "OLB", "C", "OT", "RB", "S", "QB", "CB", "DT", "MLB", "TE", "DE", "WR"),
+  Still_Starter = c(50, 65, 50, 62, 17, 44, 40, 29, 48, 36, 50, 36, 33),
+  Longevity_Rank = c(4, 1, 4, 2, 13, 7, 8, 12, 6, 9.5, 4, 9.5, 11),
+  Multiple_Pro_Bowls = c(40, 35, 50, 19, 39, 19, 30, 29, 22, 18, 12, 16, 17),
+  Consistency_Rank = c(2, 4, 1, 8.5, 3, 8.5, 5, 6, 7, 10, 13, 12, 11),
+  All_Pro = c(30, 18, 17, 15, 28, 19, 10, 19, 9, 9, 0, 8, 4),
+  Star_Power_Rank = c(1, 5, 6, 7, 2, 3, 8, 3, 9.5, 9.5, 13, 11, 12),
+  Total_Rank = c(7, 10, 11, 17.5, 18, 18.5, 21, 21, 22.5, 29, 30, 32.5, 34)
+)
+
+# Print the table
+knitr::kable(nfl_data, format = "html", caption = "NFL Draft Picks Data (2013-2019)")
+
+```
+
+```{r}
+# Load the ggplot2 package
+library(ggplot2)
+
+# Define the data with the specific order and total ranks
+data <- data.frame(
+  Position = factor(c("OG", "OLB", "C", "OT", "RB", "S", "QB", "CB", "DT", "MLB", "TE", "DE", "WR"),
+                    levels = c("OG", "OLB", "C", "OT", "RB", "S", "QB", "CB", "DT", "MLB", "TE", "DE", "WR")),
+  TotalRank = c(7, 10, 11, 17.5, 18, 18.5, 21, 21, 22.5, 29, 30, 32.5, 34)  # Total Rank from the data
+)
+
+# Reversing the Total Rank to display lower risk as higher rank
+data$RiskRank <- rank(-data$TotalRank)
+
+# Plot the risk rank
+ggplot(data, aes(x = Position, y = RiskRank)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  labs(title = "Best ROI First Round NFL Draft Picks by Position (2013-2019)", y = "Risk Rank (Highest = Lowest Risk)") +
+  theme_minimal()
+
+# Note: The 'RiskRank' is calculated by reversing the Total Rank, so lower Total Rank means lower risk.
+
+
+```
+
